@@ -1,35 +1,41 @@
+const FIRST_COLUMN = 1;
+const SECOND_COLUMN = 2;
+const THIRD_COLUMN = 3;
+
 function highlight(table) {
-  let elemStatus;
-  let elemGender;
-  let elemAge;
-  for (i = 1; i < 6; i++) {
-    elemStatus = table.rows[i].cells[3];
-    elemGender = table.rows[i].cells[2];
-    elemAge = table.rows[i].cells[1];
-    if (elemStatus.getAttribute("data-available") == "true") {
-      // elemStatus.classList.add("available");
-      table.rows[i].classList.add("available");
-    } else if (elemStatus.getAttribute("data-available") == null) {
-      // elemStatus.classList.add("unavailable");
-      // elemStatus.setAttribute("hidden", "hidden");
+  const actions = {
+    [THIRD_COLUMN]: (root, td) => {
+      if (td.dataset.available === "true") {
+        root.classList.toggle("available", true);
+      } else if (td.dataset.available === "false") {
+        root.classList.toggle("unavailable", true);
+      } else if (!td.hasAttribute("data-available")) {
+        root.hidden = true;
+      }
+    },
+    [SECOND_COLUMN]: (root, td) => {
+      if (td.textContent === "m") {
+        root.classList.toggle("male", true);
+      } else if (td.textContent === "f") {
+        root.classList.toggle("female", true);
+      }
+    },
+    [FIRST_COLUMN]: (root, td) => {
+      const age = parseInt(td.textContent, 10);
 
-      table.rows[i].setAttribute("hidden", "hidden");
-    } else {
-      table.rows[i].classList.add("unavailable");
-    }
+      if (age < 18) {
+        root.style.textDecoration = "line-through";
+      }
+    },
+  };
 
-    if (elemGender.innerHTML == "m") {
-      // elemGender.classList.add("male");
-      table.rows[i].classList.add("male");
-    } else {
-      // elemGender.classList.add("female");
-      table.rows[i].classList.add("female");
-    }
+  for (const tr of table.rows) {
+    Array.from(tr.cells).forEach((td, index) => {
+      const fn = actions[index];
 
-    if (elemAge.innerHTML < 18) {
-      // elemAge.style = "text-decoration: line-through";
-      table.rows[i].style = "text-decoration: line-through";
-    }
+      if (typeof fn === "function") {
+        fn(tr, td);
+      }
+    });
   }
-  return;
 }

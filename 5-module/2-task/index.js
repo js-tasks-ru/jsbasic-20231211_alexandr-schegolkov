@@ -3,10 +3,6 @@ function toggleText() {
   let text = document.getElementById("text");
 
   button.addEventListener("click", () => {
-    if (text.hidden != true) {
-      text.hidden = !text.hidden;
-    } else {
-      text.hidden = false;
-    }
+    text.hidden = !text.hidden;
   });
 }
