@@ -19,11 +19,10 @@ export default class ProductCard {
     </div>
   </div>
 `);
-    // let cardButton = document.querySelector(".card__button");
+
     let customEvent = new CustomEvent("product-add", {
-      // имя события должно быть именно "product-add"
-      detail: this.product.id, // Уникальный идентификатора товара из объекта товара
-      bubbles: true, // это событие всплывает - это понадобится в дальнейшем
+      detail: this.product.id,
+      bubbles: true,
     });
 
     this.elem.addEventListener("click", (event) => {
